@@ -1,0 +1,139 @@
+Metadata-Version: 2.1
+Name: fastapi-jwt
+Version: 0.3.0
+Summary: `FastAPI` extension for JTW Auth
+Author-email: Konstantin Chernyshev <kdchernyshev@gmail.com>
+License: MIT License
+Project-URL: homepage, https://github.com/k4black/fastapi-jwt
+Project-URL: documentation, https://k4black.github.io/fastapi-jwt/
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Typing :: Typed
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fastapi >=0.50.0
+Provides-Extra: authlib
+Requires-Dist: Authlib >=1.3.0 ; extra == 'authlib'
+Provides-Extra: docs
+Requires-Dist: mkdocs <2.0.0,>=1.4.0 ; extra == 'docs'
+Requires-Dist: mkdocs-material <10.0.0,>=9.0.0 ; extra == 'docs'
+Requires-Dist: MkAutoDoc <1.0.0,>=0.2.0 ; extra == 'docs'
+Requires-Dist: lazydocs <1.0.0,>=0.4.5 ; extra == 'docs'
+Requires-Dist: mkdocs-include-markdown-plugin <7.0.0,>=4.0.0 ; extra == 'docs'
+Requires-Dist: mkdocs-awesome-pages-plugin <3.0.0,>=2.8.0 ; extra == 'docs'
+Requires-Dist: mike <3.0.0,>=1.1.0 ; extra == 'docs'
+Provides-Extra: python_jose
+Requires-Dist: python-jose[cryptography] >=3.3.0 ; extra == 'python_jose'
+Provides-Extra: test
+Requires-Dist: Authlib >=1.3.0 ; extra == 'test'
+Requires-Dist: python-jose[cryptography] >=3.3.0 ; extra == 'test'
+Requires-Dist: httpx <1.0.0,>=0.23.0 ; extra == 'test'
+Requires-Dist: pytest <9.0.0,>=7.0.0 ; extra == 'test'
+Requires-Dist: pytest-cov <6.0.0,>=4.0.0 ; extra == 'test'
+Requires-Dist: pytest-mock <4.0.0,>=3.0.0 ; extra == 'test'
+Requires-Dist: requests <3.0.0,>=2.28.0 ; extra == 'test'
+Requires-Dist: black ==24.4.2 ; extra == 'test'
+Requires-Dist: mypy <2.0.0,>=1.0.0 ; extra == 'test'
+Requires-Dist: flake8 <8.0.0,>=6.0.0 ; extra == 'test'
+Requires-Dist: ruff <1.0.0,>=0.1.0 ; extra == 'test'
+Requires-Dist: isort <6.0.0,>=5.11.0 ; extra == 'test'
+Requires-Dist: types-python-jose ==3.3.4.8 ; extra == 'test'
+
+# fastapi-jwt
+
+[![Test](https://github.com/k4black/fastapi-jwt/actions/workflows/test.yml/badge.svg)](https://github.com/k4black/fastapi-jwt/actions/workflows/test.yml)
+[![Publish](https://github.com/k4black/fastapi-jwt/actions/workflows/publish.yml/badge.svg)](https://github.com/k4black/fastapi-jwt/actions/workflows/publish.yml)
+[![codecov](https://codecov.io/gh/k4black/fastapi-jwt/branch/master/graph/badge.svg?token=3F9J850FX2)](https://codecov.io/gh/k4black/fastapi-jwt)
+[![pypi](https://img.shields.io/pypi/v/fastapi-jwt)](https://pypi.org/project/fastapi-jwt/)
+
+FastAPI native extension, easy and simple JWT auth
+
+---
+
+
+**Documentation:** [k4black.github.io/fastapi-jwt](https://k4black.github.io/fastapi-jwt/)  
+**Source Code:** [github.com/k4black/fastapi-jwt](https://github.com/k4black/fastapi-jwt/)
+
+
+## Features
+* OpenAPI schema generation 
+* Native integration with FastAPI
+* Access/Refresh JWT
+* JTI
+* Cookie setting
+
+
+## Installation
+You can access package [fastapi-jwt in pypi](https://pypi.org/project/fastapi-jwt/)
+```shell
+pip install fastapi-jwt[authlib]
+# or
+pip install fastapi-jwt[python_jose]
+```
+
+The fastapi-jwt will choose the backend automatically if library is installed with the following priority:
+1. authlib
+2. python_jose (deprecated)
+
+## Usage
+This library made in fastapi style, so it can be used as standard security features 
+
+```python
+from fastapi import FastAPI, Security, Response
+from fastapi_jwt import JwtAuthorizationCredentials, JwtAccessBearer
+
+
+app = FastAPI()
+access_security = JwtAccessBearer(secret_key="secret_key", auto_error=True)
+
+
+@app.post("/auth")
+def auth():
+    subject = {"username": "username", "role": "user"}
+    return {"access_token": access_security.create_access_token(subject=subject)}
+
+@app.post("/auth_cookie")
+def auth(response: Response):
+    subject = {"username": "username", "role": "user"}
+    access_token = access_security.create_access_token(subject=subject)
+    access_security.set_access_cookie(response, access_token)
+    return {"access_token": access_token}
+
+
+@app.get("/users/me")
+def read_current_user(
+    credentials: JwtAuthorizationCredentials = Security(access_security),
+):
+    return {"username": credentials["username"], "role": credentials["role"]}
+```
+
+For more examples see usage docs
+
+
+## Alternatives 
+
+* FastAPI docs suggest [writing it manually](https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/), but
+  * code duplication  
+  * opportunity for bugs
+
+* There is nice [fastapi-jwt-auth](https://github.com/IndominusByte/fastapi-jwt-auth/), but
+  * poorly supported  
+  * not "FastAPI-style" (not native functions parameters)
+
+## FastAPI Integration 
+
+There it is open and maintained [Pull Request #3305](https://github.com/tiangolo/fastapi/pull/3305) to the `fastapi` repo. Currently, not considered.
+
+## Requirements 
+
+* `fastapi`
+* `authlib` or `python-jose[cryptography]` (deprecated)
+
+## License
+This project is licensed under the terms of the MIT license.
