@@ -10,10 +10,10 @@ class ConnectionManager:
         await websocket.accept()
         self.active_connections[user_id] = websocket  # Сохраняем WebSocket под уникальным user_id
 
-    def disconnect(self, user_id: str):
+    async def disconnect(self, user_id: str):
         websocket = self.active_connections.pop(user_id, None)
         if websocket:
-            websocket.close()
+            await websocket.close()
 
     async def send_personal_message(self, message: str, user_id: str):
         websocket = self.active_connections.get(user_id)

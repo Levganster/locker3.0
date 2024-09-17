@@ -8,9 +8,7 @@ from core.websockets.config import (
     INCLUDE_IN_SCHEMA
 )
 
-from fastapi_jwt import JwtAccessBearer, JwtAuthorizationCredentials
-
-from core.websockets.dependencies import get_user_service
+from fastapi_jwt import JwtAuthorizationCredentials
 
 from core.auth.views import access_security
 
@@ -32,7 +30,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
     except Exception as e:
         print(f"Connection error: {e}")
     finally:
-        manager.disconnect(user_id)
+        await manager.disconnect(user_id)
 
 # API для отправки сообщения от преподавателя всем клиентам
 @router.post("/send_to_all")

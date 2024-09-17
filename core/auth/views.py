@@ -6,7 +6,7 @@ from fastapi import APIRouter, Response, Security, status, Depends, HTTPExceptio
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.auth.schemas import AuthCreateSchema
-from fastapi_jwt import JwtAccessBearer, JwtAuthorizationCredentials, JwtAccessBearerCookie
+from fastapi_jwt import JwtAuthorizationCredentials, JwtAccessBearerCookie
 from core.auth.schemas import AuthCreateSchema
 from core.database import get_async_session
 from core.user.models import User
