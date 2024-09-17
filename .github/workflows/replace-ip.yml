@@ -18,7 +18,7 @@ jobs:
       - name: Replace IP addresses
         run: |
           # Укажите пути к файлам, в которых нужно заменить IP-адреса
-          FILES_TO_UPDATE="alembic.ini core/settings.py"
+          FILES_TO_UPDATE="alembic.ini core/settings.py core/database.py"
           
           # Укажите старый и новый IP-адреса для первой замены
           OLD_IP="postgresql://postgres:postgres@localhost:5432/postgres"
