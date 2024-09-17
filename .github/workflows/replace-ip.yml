@@ -22,11 +22,11 @@ jobs:
           
           # Укажите старый и новый IP-адреса для первой замены
           OLD_IP="postgresql://postgres:postgres@localhost:5432/postgres"
-          NEW_IP="postgresql://gen_user:r%7C%5Equ%26n%3EZ.72oQ@192.168.0.6:5432/default_db"
+          NEW_IP="postgresql://gen_user:r\|\^qu\&n>Z.72oQ@192.168.0.6:5432/default_db"
 
           # Укажите старый и новый IP-адреса для второй замены
           OLD_I="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
-          NEW_I="postgresql+asyncpg://gen_user:r%7C%5Equ%26n%3EZ.72oQ@192.168.0.6:5432/default_db"
+          NEW_I="postgresql+asyncpg://gen_user:r\|\^qu\&n>Z.72oQ@192.168.0.6:5432/default_db"
           
           # Выполнить замену IP-адресов в указанных файлах
           for FILE in $FILES_TO_UPDATE; do
