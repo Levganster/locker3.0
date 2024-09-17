@@ -31,6 +31,7 @@ async def set_auth(credentials: JwtAuthorizationCredentials = Security(access_se
     global canAuth
     canAuth = True
 
+@router.get('/get_authstate')
 def get_authstate():
     global canAuth
     return(canAuth)
