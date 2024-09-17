@@ -20,24 +20,20 @@ jobs:
           # Укажите пути к файлам, в которых нужно заменить IP-адреса
           FILES_TO_UPDATE="alembic.ini core/settings.py"
           
-          # Укажите старый и новый IP-адрес
+          # Укажите старый и новый IP-адреса для первой замены
           OLD_IP="postgresql://postgres:postgres@localhost:5432/postgres"
           NEW_IP="postgresql://gen_user:r|^qu&n>Z.72oQ@192.168.0.6:5432/default_db"
-          
-          # Выполнить замену IP-адресов в указанных файлах
-          for FILE in $FILES_TO_UPDATE; do
-            sed -i "s/$OLD_IP/$NEW_IP/g" $FILE
-          
-          # Укажите пути к файлам, в которых нужно заменить IP-адреса
-          FILE_TO_UPDATE="core/settings.py"
-          
-          # Укажите старый и новый IP-адрес
+
+          # Укажите старый и новый IP-адреса для второй замены
           OLD_I="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
           NEW_I="postgresql+asyncpg://gen_user:r|^qu&n>Z.72oQ@192.168.0.6:5432/default_db"
           
           # Выполнить замену IP-адресов в указанных файлах
-          for FILE in $FILE_TO_UPDATE; do
-            sed -i "s/$OLD_I/$NEW_I/g" $FILE
+          for FILE in $FILES_TO_UPDATE; do
+            # Первая замена
+            sed -i "s|$OLD_IP|$NEW_IP|g" "$FILE"
+            # Вторая замена
+            sed -i "s|$OLD_I|$NEW_I|g" "$FILE"
           done
 
       # Сохранить изменения и закоммитить в репозиторий
