@@ -12,7 +12,7 @@ class Base(DeclarativeBase):
     }
 
 
-engine = create_async_engine("postgresql+asyncpg://gen_user:r%7C%5Equ%26n%3EZ.72oQ@192.168.0.6:5432/default_db")
+engine = create_async_engine("postgresql+asyncpg://postgres:postgres@localhost:5432/postgres")
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

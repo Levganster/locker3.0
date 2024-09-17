@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Security
+from fastapi import APIRouter, HTTPException,Security
 from fastapi_jwt import JwtAuthorizationCredentials
 from core.auth.views import access_security
 
@@ -31,6 +31,7 @@ async def set_auth(credentials: JwtAuthorizationCredentials = Security(access_se
     global canAuth
     canAuth = True
 
+@router.get('/get_authstate')
 def get_authstate():
     global canAuth
     return(canAuth)
