@@ -1,0 +1,50 @@
+name: Replace IP Addresses on Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  replace_ip_addresses:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Проверить код из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Выполнить замену IP-адресов в файлах
+      - name: Replace IP addresses
+        run: |
+          # Укажите пути к файлам, в которых нужно заменить IP-адреса
+          FILES_TO_UPDATE="alembic.ini core/settings.py"
+          
+          # Укажите старый и новый IP-адрес
+          OLD_IP="postgresql://postgres:postgres@localhost:5432/postgres"
+          NEW_IP="postgresql://gen_user:r|^qu&n>Z.72oQ@192.168.0.6:5432/default_db"
+          
+          # Выполнить замену IP-адресов в указанных файлах
+          for FILE in $FILES_TO_UPDATE; do
+            sed -i "s/$OLD_IP/$NEW_IP/g" $FILE
+          
+          # Укажите пути к файлам, в которых нужно заменить IP-адреса
+          FILE_TO_UPDATE="core/settings.py"
+          
+          # Укажите старый и новый IP-адрес
+          OLD_I="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
+          NEW_I="postgresql+asyncpg://gen_user:r|^qu&n>Z.72oQ@192.168.0.6:5432/default_db"
+          
+          # Выполнить замену IP-адресов в указанных файлах
+          for FILE in $FILE_TO_UPDATE; do
+            sed -i "s/$OLD_I/$NEW_I/g" $FILE
+          done
+
+      # Сохранить изменения и закоммитить в репозиторий
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "Replace IP addresses after merge to main"
+          git push
