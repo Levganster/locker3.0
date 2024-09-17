@@ -1,5 +1,5 @@
 # delete any if you don't need it
-from fastapi import FastAPI, Request, Header
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import (
     get_redoc_html,
