@@ -22,6 +22,6 @@ ALLOW_CREDENTIALS = True
 
 
 # Database settings
-ASYNC_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
-SYNC_DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/postgres" # for alembic migrations
+ASYNC_DATABASE_URL = "postgresql+asyncpg://gen_user:r|^qu&n>Z.72oQ@192.168.0.6:5432/default_db"
+SYNC_DATABASE_URL = "postgresql://gen_user:r|^qu&n>Z.72oQ@192.168.0.6:5432/default_db" # for alembic migrations
 
