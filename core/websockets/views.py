@@ -27,6 +27,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
         while True:
             data = await websocket.receive_text()  # Ожидание данных от клиента
             await manager.send_personal_message(f"Вы сказали: {data}", user_id)
+            await manager.add_active_user(user_id, data)
     except Exception as e:
         print(f"Connection error: {e}")
     finally:
@@ -60,3 +61,7 @@ def get_active_connections(
     if not credentials["admin"]:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     return manager.get_active_connections()
+
+@router.get("/fake_connections")
+def fake_connections():
+    return {"id" : "id1","name" : "name1"},{"id" : "id2","name" : "name2"},{"id" : "id3","name" : "name3"},

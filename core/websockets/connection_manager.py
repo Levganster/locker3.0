@@ -5,10 +5,12 @@ app = FastAPI()
 class ConnectionManager:
     def __init__(self):
         self.active_connections: dict[str, WebSocket] = {}  # Используем словарь для хранения идентификаторов
+        self.active_users: dict[str,str,str,str] = []
 
     async def connect(self, websocket: WebSocket, user_id: str):
         await websocket.accept()
         self.active_connections[user_id] = websocket  # Сохраняем WebSocket под уникальным user_id
+        self.active_users.append({"id": user_id, "name": None})
 
     async def disconnect(self, user_id: str):
         websocket = self.active_connections.pop(user_id, None)
@@ -25,4 +27,10 @@ class ConnectionManager:
             await connection.send_text(message)
 
     def get_active_connections(self):
-        return list(self.active_connections.keys())
+        return self.active_users
+    
+    async def add_active_user(self, id, name):
+        for user in self.active_users:
+            if user['id'] == id:
+                user['name'] = name  # Обновление имени пользователя
+                break
