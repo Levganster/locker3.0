@@ -2,6 +2,7 @@
 Views controllers for auth app
 """
 
+from datetime import timedelta
 from fastapi import APIRouter, Response, Security, status, Depends, HTTPException
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,10 +12,9 @@ from core.auth.schemas import AuthCreateSchema
 from core.database import get_async_session
 from core.user.models import User
 
-access_security = JwtAccessBearerCookie(secret_key="secret_key", auto_error=True)
+access_security = JwtAccessBearerCookie(secret_key="secret_key", auto_error=True, access_expires_delta=timedelta(days=7))
 
 from core.control.views import get_authstate
-
 
 from core.auth.config import (
     PREFIX,
