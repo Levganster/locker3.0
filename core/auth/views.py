@@ -63,9 +63,3 @@ async def auth(response: Response, user: AuthCreateSchema, session: AsyncSession
     access_token = access_security.create_access_token(subject=subject)
     access_security.set_access_cookie(response, access_token)
     return {"access_token": access_token}
-
-@router.get("/")
-async def check(credentials: JwtAuthorizationCredentials = Security(access_security)):
-    if not credentials["admin"]:
-        raise HTTPException(status_code=403, detail="You dont have permission to access")
-    return {"username": credentials["username"], "admin": credentials["admin"]}
