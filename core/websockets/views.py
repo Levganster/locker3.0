@@ -28,6 +28,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
             data = await websocket.receive_text()  # Ожидание данных от клиента
             await manager.send_personal_message(f"Вы сказали: {data}", user_id)
             await manager.add_active_user(user_id, data)
+    except WebSocketDisconnect:
+        print(f"Пользователь {user_id} отключился")
     except Exception as e:
         print(f"Connection error: {e}")
     finally:

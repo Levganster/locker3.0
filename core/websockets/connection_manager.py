@@ -14,11 +14,11 @@ class ConnectionManager:
 
     async def disconnect(self, user_id: str):
         websocket = self.active_connections.pop(user_id, None)
+        for user in self.active_users:
+            if user['id'] == user_id:
+                self.active_users.remove(user)
         if websocket:
             await websocket.close()
-            for user in self.active_users:
-                if user['id'] == user_id:
-                    self.active_users.remove(user)
 
     async def send_personal_message(self, message: str, user_id: str):
         websocket = self.active_connections.get(user_id)
