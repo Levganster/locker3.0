@@ -12,11 +12,13 @@ class ConnectionManager:
         self.active_connections[user_id] = websocket  # Сохраняем WebSocket под уникальным user_id
         self.active_users.append({"id": user_id, "name": None})
 
-    async def disconnect(self, user_id: str):
-        websocket = self.active_connections.pop(user_id, None)
+    async def delete_active_user(self, user_id: str):
         for user in self.active_users:
             if user['id'] == user_id:
                 self.active_users.remove(user)
+
+    async def disconnect(self, user_id: str):
+        websocket = self.active_connections.pop(user_id, None)
         if websocket:
             await websocket.close()
             for user in self.active_users:
