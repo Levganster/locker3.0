@@ -22,7 +22,7 @@ async def get_logs(credentials: JwtAuthorizationCredentials = Security(access_se
     return get_logs_as_json()
 
 @router.post('/delete_logs')
-async def delete_logs(amount: int, credentials: JwtAuthorizationCredentials = Security(access_security)):
+async def delete_logs(credentials: JwtAuthorizationCredentials = Security(access_security),amount: int = 0):
     if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     await delete_logs(amount)
