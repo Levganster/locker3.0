@@ -15,6 +15,7 @@ from core.user.views import router as user_router
 from core.auth.views import router as auth_router
 from core.websockets.views import router as web_router
 from core.control.views import router as control_router
+from core.log.views import router as log_router
 
 # import base settings
 from core.settings import (
@@ -81,6 +82,6 @@ async def redoc_html():
 # add routers to app
 # list of routers to include in app
 # e.g. routers = [my_app_router, users_router, auth_router]
-routers = [auth_router, user_router, web_router, control_router]
+routers = [auth_router, user_router, web_router, control_router, log_router]
 for router in routers:
     app.include_router(router)
