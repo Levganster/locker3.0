@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException,Security
 from fastapi_jwt import JwtAuthorizationCredentials
 from core.auth.views import access_security
-from log.logger import get_logs_as_json
+from core.log.logger import get_logs_as_json
 
-from core.control.config import (
+from core.log.config import (
     PREFIX,
     TAGS,
     INCLUDE_IN_SCHEMA
