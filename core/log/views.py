@@ -17,12 +17,12 @@ router = APIRouter(
 
 @router.get('/get_logs')
 async def get_logs(credentials: JwtAuthorizationCredentials = Security(access_security)):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     return get_logs_as_json()
 
 @router.post('/delete_logs')
-async def delete_logs( amount: int, credentials: JwtAuthorizationCredentials = Security(access_security)):
-    if not credentials["admin"]:
+async def delete_logs(amount: int, credentials: JwtAuthorizationCredentials = Security(access_security)):
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     await delete_logs(amount)

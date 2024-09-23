@@ -42,7 +42,7 @@ async def send_to_all(
     message: str,
     credentials: JwtAuthorizationCredentials = Security(access_security),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     await manager.broadcast(message)
     return {"message": "Сообщение отправлено всем подключенным клиентам"}
@@ -53,7 +53,7 @@ async def send_personal_message(
     user_id: str,
     credentials: JwtAuthorizationCredentials = Security(access_security),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     await manager.send_personal_message(message, user_id)
 
@@ -61,7 +61,7 @@ async def send_personal_message(
 def get_active_connections(
     credentials: JwtAuthorizationCredentials = Security(access_security),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     return manager.get_active_connections()
 

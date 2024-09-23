@@ -33,7 +33,7 @@ async def get_one(
     credentials: JwtAuthorizationCredentials = Security(access_security),
     service: UserService = Depends(get_user_service),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     item = await service.get_by_id(id)
     return item
@@ -45,7 +45,7 @@ async def create_one(
     credentials: JwtAuthorizationCredentials = Security(access_security),
     service: UserService = Depends(get_user_service),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     new_item = await service.create(item)
     return new_item
@@ -58,7 +58,7 @@ async def update_one(
     credentials: JwtAuthorizationCredentials = Security(access_security),
     service: UserService = Depends(get_user_service),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     new_item = await service.update(id, new_item)
     return new_item
@@ -70,7 +70,7 @@ async def delete_one(
     credentials: JwtAuthorizationCredentials = Security(access_security),
     service: UserService = Depends(get_user_service),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     await service.delete(id)
 
@@ -82,7 +82,7 @@ async def get_all(
     offset: int = 0,
     service: UserService = Depends(get_user_service),
 ):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     items = await service.get_all(limit=limit, offset=offset)
     return items

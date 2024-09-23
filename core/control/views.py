@@ -19,14 +19,14 @@ canAuth = False
 
 @router.post('/disable')
 async def set_auth(credentials: JwtAuthorizationCredentials = Security(access_security)):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     global canAuth
     canAuth = False
 
 @router.post('/enable')
 async def set_auth(credentials: JwtAuthorizationCredentials = Security(access_security)):
-    if not credentials["admin"]:
+    if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
     global canAuth
     canAuth = True
