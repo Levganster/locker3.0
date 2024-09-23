@@ -25,4 +25,4 @@ async def get_logs(credentials: JwtAuthorizationCredentials = Security(access_se
 async def delete_logs( amount: int, credentials: JwtAuthorizationCredentials = Security(access_security)):
     if not credentials["admin"]:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
-    delete_logs(amount)
+    await delete_logs(amount)
