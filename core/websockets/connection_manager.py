@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 
-from core.log import log_connection, log_authorization
+from core.log.logger import log_connection, log_authorization
 
 app = FastAPI()
 
