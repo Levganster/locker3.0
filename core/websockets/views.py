@@ -32,10 +32,9 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
             await manager.add_active_user(user_id, data)
     except WebSocketDisconnect:
         print(f"Пользователь {user_id} отключился")
+        await manager.delete_active_user(user_id)
     except Exception as e:
         print(f"Connection error: {e}")
-    finally:
-        await manager.disconnect(user_id)
 
 # API для отправки сообщения от преподавателя всем клиентам
 @router.post("/send_to_all")
