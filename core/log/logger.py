@@ -21,7 +21,7 @@ logger = logging.getLogger("jsonLogger")
 logger.setLevel(logging.INFO)
 
 # Обработчик для записи в файл
-file_handler = logging.FileHandler('log.json')
+file_handler = logging.FileHandler('log.json', mode='a')
 file_handler.setLevel(logging.INFO)
 
 # Применяем JSONFormatter
@@ -54,7 +54,7 @@ def get_logs_as_json(file_path='log.json'):
             # Читаем содержимое файла построчно
             logs = log_file.readlines()
             # Парсим каждую строку как JSON
-            logs_json = [json.loads(log.strip()) for log in logs][::-1]
+            logs_json = [json.loads(log.strip()) for log in logs]
             return logs_json
     except FileNotFoundError:
         return {"error": "Log file not found"}
