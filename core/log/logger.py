@@ -42,3 +42,16 @@ def log_authorization(id, username):
         'username': username
     }
     logger.info("Authorization event", extra=extra)
+
+def get_logs_as_json(file_path='log.json'):
+    try:
+        with open(file_path, 'r') as log_file:
+            # Читаем содержимое файла построчно
+            logs = log_file.readlines()
+            # Парсим каждую строку как JSON
+            logs_json = [json.loads(log.strip()) for log in logs]
+            return logs_json
+    except FileNotFoundError:
+        return {"error": "Log file not found"}
+    except json.JSONDecodeError:
+        return {"error": "Error decoding log file"}
