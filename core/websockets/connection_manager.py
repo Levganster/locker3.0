@@ -33,7 +33,7 @@ class ConnectionManager:
             await connection.send_text(message)
 
     def get_active_connections(self):
-        return self.active_users
+        return sorted(self.active_users, key=lambda x: x['id'])
     
     async def add_active_user(self, id, name):
         for user in self.active_users:
