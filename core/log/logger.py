@@ -5,10 +5,10 @@ from datetime import datetime
 class JSONFormatter(logging.Formatter):
     def format(self, record):
         log_record = {
-            'id': record.id,
+            'id': getattr(record, 'id', None),
             'time': self.formatTime(record, self.datefmt),
-            'event': record.event,
-            'username': record.username  # По умолчанию username = None (null в JSON)
+            'event': getattr(record, 'event', 'Unknown'),
+            'username': getattr(record, 'username', None)  # По умолчанию username = None
         }
         return json.dumps(log_record)
     
@@ -39,9 +39,6 @@ formatter = JSONFormatter()
 reverse_handler.setFormatter(formatter)
 logger.addHandler(reverse_handler)
 
-# Записываем логи в файл в обратном порядке
-reverse_handler.flush_to_file()
-
 # Функция для логирования событий
 def log_connection(id):
     extra = {
@@ -66,6 +63,7 @@ def log_disconnection(id, username):
         'username': username
     }
     logger.info("Disconnection event", extra=extra)
+
 
 def get_logs_as_json(file_path='log.json'):
     try:
