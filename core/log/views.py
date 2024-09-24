@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException,Security
 from fastapi_jwt import JwtAuthorizationCredentials
 from core.auth.views import access_security
-from core.log.logger import get_logs_as_json, delete_logs
+from core.log.logger import read_logs, delete_logs
 
 from core.log.config import (
     PREFIX,
@@ -19,7 +19,7 @@ router = APIRouter(
 async def get_logs(credentials: JwtAuthorizationCredentials = Security(access_security)):
     if not credentials["admin"] and credentials:
         raise HTTPException(status_code=403, detail="You dont have permission to access")
-    return get_logs_as_json()
+    return read_logs()
 
 @router.post('/delete_logs')
 async def delete_amount_of_logs(credentials: JwtAuthorizationCredentials = Security(access_security),amount: int = 0):
