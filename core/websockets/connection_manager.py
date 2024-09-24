@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 
-from core.log.logger import log_connection, log_authorization
+from core.log.logger import log_connection, log_authorization, log_disconnection
 
 app = FastAPI()
 
@@ -26,6 +26,7 @@ class ConnectionManager:
             await websocket.close()
             for user in self.active_users:
                 if user['id'] == user_id:
+                    log_disconnection(user_id, user['name'])
                     self.active_users.remove(user)
 
     async def send_personal_message(self, message: str, user_id: str):

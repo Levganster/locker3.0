@@ -21,7 +21,7 @@ logger = logging.getLogger("jsonLogger")
 logger.setLevel(logging.INFO)
 
 # Обработчик для записи в файл
-file_handler = logging.FileHandler('log.json', mode='a')
+file_handler = logging.FileHandler('log.json')
 file_handler.setLevel(logging.INFO)
 
 # Применяем JSONFormatter
@@ -47,6 +47,14 @@ def log_authorization(id, username):
         'username': username
     }
     logger.info("Authorization event", extra=extra)
+
+def log_disconnection(id, username):
+    extra = {
+        'id': id,
+        'event': 'disconnect',
+        'username': username
+    }
+    logger.info("Disconnection event", extra=extra)
 
 def get_logs_as_json(file_path='log.json'):
     try:
