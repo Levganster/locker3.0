@@ -40,6 +40,9 @@ class ConnectionManager:
     def get_active_connections(self):
         return sorted(self.active_users, key=lambda x: x['id'])
     
+    def get_active_users(self):
+        return self.active_connections
+    
     async def add_active_user(self, user_id, name):
         for user in self.active_users:
             if user['id'] == user_id:

@@ -68,3 +68,7 @@ def get_active_connections(
 @router.get("/fake_connections")
 def fake_connections():
     return sorted(my_dict, key=lambda x: x['id'])
+
+@router.get("/active")
+def getactive():
+    return manager.active_users()
