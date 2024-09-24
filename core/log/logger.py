@@ -13,23 +13,34 @@ class JSONFormatter(logging.Formatter):
         return json.dumps(log_record)
     
     def formatTime(self, record, datefmt=None):
-        # Форматируем время без миллисекунд
         return datetime.fromtimestamp(record.created).strftime('%Y-%m-%d %H:%M:%S')
+
+# Промежуточное хранилище для логов
+logs_buffer = []
+
+class ReverseOrderHandler(logging.Handler):
+    def emit(self, record):
+        log_entry = self.format(record)
+        logs_buffer.append(log_entry)
+    
+    def flush_to_file(self):
+        with open('log.json', 'w') as f:
+            # Записываем логи в обратном порядке
+            for log in reversed(logs_buffer):
+                f.write(log + '\n')
 
 # Настройка логирования
 logger = logging.getLogger("jsonLogger")
 logger.setLevel(logging.INFO)
 
-# Обработчик для записи в файл
-file_handler = logging.FileHandler('log.json')
-file_handler.setLevel(logging.INFO)
-
-# Применяем JSONFormatter
+# Используем кастомный обработчик вместо стандартного FileHandler
+reverse_handler = ReverseOrderHandler()
 formatter = JSONFormatter()
-file_handler.setFormatter(formatter)
+reverse_handler.setFormatter(formatter)
+logger.addHandler(reverse_handler)
 
-# Добавляем обработчик в логгер
-logger.addHandler(file_handler)
+# Записываем логи в файл в обратном порядке
+reverse_handler.flush_to_file()
 
 # Функция для логирования событий
 def log_connection(id):
