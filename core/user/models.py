@@ -9,4 +9,5 @@ class User(Base):
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True, nullable=False)
     username = sa.Column(sa.String, unique=True, nullable=False)
     password = sa.Column(sa.String, nullable=False)
+    group = sa.Column(sa.String)
     admin = sa.Column(sa.Boolean, default=False)

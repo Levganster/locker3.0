@@ -3,3 +3,7 @@ core/auth/__pycache__
 core/control/__pycache__
 core/user/__pycache__
 core/websockets/__pycache__
+
+**/__pycache/
+
+.venv
