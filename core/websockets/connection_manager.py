@@ -18,7 +18,6 @@ class ConnectionManager:
     async def delete_active_user(self, user_id: str):
         for user in self.active_users:
             if user['id'] == user_id:
-                print(user_id, user['name'])
                 log_disconnection(user_id, user['name'])
                 self.active_users.remove(user)
 
@@ -28,7 +27,6 @@ class ConnectionManager:
             await websocket.close()
             for user in self.active_users:
                 if user['id'] == user_id:
-                    print(user_id, user['name'])
                     log_disconnection(user_id, user['name'])
                     self.active_users.remove(user)
 

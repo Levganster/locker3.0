@@ -51,7 +51,7 @@ def log_authorization(id, username):
 def log_disconnection(id, username):
     extra = {
         'id': id,
-        'event': 'disconnect',
+        'event': 'disconnection',
         'username': username
     }
     logger.info("Disconnection event", extra=extra)
