@@ -71,4 +71,4 @@ def fake_connections():
 
 @router.get("/active")
 def getactive():
-    return manager.active_users()
+    return manager.get_active_users()
