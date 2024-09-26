@@ -41,7 +41,7 @@ async def auth(user: AuthCreateSchema, session: AsyncSession = Depends(get_async
     
     if user.password != db_user.password:
         raise HTTPException(status_code=422, detail="Invalid username or password")
-    subject = {'username': db_user.username, 'admin': db_user.admin}
+    subject = {'username': db_user.username, 'admin': db_user.admin, 'group': db_user.group}
     return {"access_token": access_security.create_access_token(subject=subject)}
 
 @router.post("/cookie")
@@ -59,7 +59,7 @@ async def auth(response: Response, user: AuthCreateSchema, session: AsyncSession
 
     if user.password != db_user.password:
         raise HTTPException(status_code=422, detail="Invalid username or password")
-    subject = {'username': db_user.username, 'admin': db_user.admin}
+    subject = {'username': db_user.username, 'admin': db_user.admin, 'group': db_user.group}
     access_token = access_security.create_access_token(subject=subject)
     access_security.set_access_cookie(response, access_token)
     return {"access_token": access_token}
