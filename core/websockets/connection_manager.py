@@ -15,13 +15,13 @@ class ConnectionManager:
         self.active_users.append({"id": user_id, "name": None, "group": None})
         log_connection(user_id)
 
-    async def delete_active_user(self, user_id: str, group: str):
+    async def delete_active_user(self, user_id: str):
         for user in self.active_users:
             if user['id'] == user_id:
                 log_disconnection(user_id, user['name'], user['group'])
                 self.active_users.remove(user)
 
-    async def disconnect(self, user_id: str, group: str):
+    async def disconnect(self, user_id: str):
         websocket = self.active_connections.pop(user_id, None)
         if websocket:
             await websocket.close()
