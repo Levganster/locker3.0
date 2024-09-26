@@ -11,7 +11,7 @@ from pydantic import BaseModel
 class UserCreateSchema(BaseModel):
     username: str
     password: str
+    group: str
 
 class UserGetSchema(UserCreateSchema):
     is_admin: bool = False
-    group: str
