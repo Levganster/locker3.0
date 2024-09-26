@@ -1,4 +1,4 @@
-
+import re
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, status, Depends, Security
 
 my_dict={"id" : "id2","name" : "name2"},{"id" : "id1","name" : "name1"},{"id" : "id3","name" : "name3"}
@@ -22,6 +22,20 @@ router = APIRouter(
 )
 manager = ConnectionManager()
 
+def validate_format(s):
+    pattern = r'^[a-zA-Z0-9_]+: [a-zA-Z0-9_]+, [a-zA-Z0-9_]+: [a-zA-Z0-9_]+$'
+    return bool(re.match(pattern, s))
+
+def extract_values(s):
+    # Регулярное выражение с группами захвата для username и group
+    pattern = r'username: (\w+), group: (\w+)'
+    match = re.match(pattern, s)
+    if match:
+        username = match.group(1)
+        group = match.group(2)
+        return username, group
+    return None, None
+
 @router.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: str):
     await manager.connect(websocket, user_id)
@@ -29,7 +43,9 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
         while True:
             data = await websocket.receive_text()  # Ожидание данных от клиента
             await manager.send_personal_message(f"Вы сказали: {data}", user_id)
-            await manager.add_active_user(user_id, data)
+            if validate_format(data):
+                username, group = extract_values(data)
+                await manager.add_active_user(user_id, username, group)
     except WebSocketDisconnect:
         print(f"Пользователь {user_id} отключился")
         await manager.delete_active_user(user_id)

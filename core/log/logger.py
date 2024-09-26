@@ -1,26 +1,26 @@
-import json
 from datetime import datetime
-import os
+import os, json
 
 LOG_FILE = 'logs.json'
 
 
-def log_event(id: str, event: str, username: str):
+def log_event(id: str, event: str, username: str, group: str):
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Без миллисекунд
     log_entry = {
         'id': id,
         'time': current_time,
         'event': event,
-        'username': username
+        'username': username,
+        'group': group
     }
     save_log(log_entry)
 
 def log_connection(id: str):
     log_event(id, "connection", None)
-def log_authorization(id: str, username: str):
-    log_event(id, "authorization", username)
-def log_disconnection(id: str, username: str):
-    log_event(id, "disconnection", username)
+def log_authorization(id: str, username: str, group: str):
+    log_event(id, "authorization", username, group)
+def log_disconnection(id: str, username: str, group: str):
+    log_event(id, "disconnection", username, group)
 
 def save_log(log_entry):
     # Чтение текущего файла логов
