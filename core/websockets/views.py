@@ -48,7 +48,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
                 await manager.add_active_user(user_id, username, group)
     except WebSocketDisconnect:
         print(f"Пользователь {user_id} отключился")
-        await manager.delete_active_user(user_id)
+        await manager.delete_active_user(user_id, group)
     except Exception as e:
         print(f"Connection error: {e}")
 
