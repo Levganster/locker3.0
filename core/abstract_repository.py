@@ -81,7 +81,7 @@ class SQLAlchemyRepository(AbstractRepository):
     async def update_by_id(self, id: int, new_data: dict):
         async with async_session_maker() as session:
             stmt = update(self.model).where(
-                id==id
+                self.model.id==id
             ).values(new_data).returning(self.model)
             
             res = await session.execute(stmt)
