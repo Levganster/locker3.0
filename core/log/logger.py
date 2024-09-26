@@ -16,7 +16,7 @@ def log_event(id: str, event: str, username: str, group: str):
     save_log(log_entry)
 
 def log_connection(id: str):
-    log_event(id, "connection", None)
+    log_event(id, "connection", None, None)
 def log_authorization(id: str, username: str, group: str):
     log_event(id, "authorization", username, group)
 def log_disconnection(id: str, username: str, group: str):
