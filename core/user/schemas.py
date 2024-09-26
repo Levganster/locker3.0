@@ -14,4 +14,4 @@ class UserCreateSchema(BaseModel):
     group: str
 
 class UserGetSchema(UserCreateSchema):
-    is_admin: bool
+    admin: bool
