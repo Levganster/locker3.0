@@ -54,7 +54,7 @@ async def create_one(
 @router.put('/{id}', response_model=UserGetSchema, status_code=status.HTTP_200_OK)
 async def update_one(
     id: int,
-    new_item: UserCreateSchema,
+    new_item: UserGetSchema,
     credentials: JwtAuthorizationCredentials = Security(access_security),
     service: UserService = Depends(get_user_service),
 ):
