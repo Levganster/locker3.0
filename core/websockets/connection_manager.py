@@ -36,8 +36,12 @@ class ConnectionManager:
             await websocket.send_text(message)
 
     async def broadcast(self, message: str):
-        for user_id, connection in self.active_connections.items():
-            await connection.send_text(message)
+        try:
+            for _, connection in self.active_connections.items():
+                await connection.send_text(message)
+        except Exception as e:
+            print(e)
+
 
     def get_active_connections(self):
         return sorted(self.active_users, key=lambda x: x['id'])
