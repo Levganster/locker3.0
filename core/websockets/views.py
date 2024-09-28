@@ -23,7 +23,7 @@ router = APIRouter(
 manager = ConnectionManager()
 
 def validate_format(s):
-    pattern = r'^[a-zA-Z0-9_]+: (\w+)+, [a-zA-Z0-9_]+: (\w+) +$'
+    pattern = r"username: (\w+), group: (\w+)"
     return bool(re.match(pattern, s))
 
 def extract_values(s):
