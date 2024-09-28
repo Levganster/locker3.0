@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 
-from core.websockets.connection_manager import ConnectionManager as manager
-
+from core.websockets.connection_manager import ConnectionManager
 from core.hack.config import (
     PREFIX,
     TAGS,
@@ -13,6 +12,8 @@ router = APIRouter(
     tags=TAGS,
     include_in_schema=INCLUDE_IN_SCHEMA
 )
+
+manager = ConnectionManager()
 
 @router.post("/create")
 async def create(
