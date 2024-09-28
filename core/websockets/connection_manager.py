@@ -4,18 +4,6 @@ from core.log.logger import log_connection, log_authorization, log_disconnection
 
 from fastapi import APIRouter
 
-from core.websockets.config import (
-    PREFIX,
-    TAGS,
-    INCLUDE_IN_SCHEMA
-)
-
-router = APIRouter(
-    prefix=PREFIX,
-    tags=TAGS,
-    include_in_schema=INCLUDE_IN_SCHEMA
-)
-
 app = FastAPI()
 
 class ConnectionManager:
@@ -67,19 +55,3 @@ class ConnectionManager:
                 user['group'] = group
                 break
         log_authorization(user_id, name, group)
-
-@router.post("/create")
-async def create(
-    user_id: str
-):
-    ConnectionManager.active_connections[user_id] = "websocket"  # Сохраняем WebSocket под уникальным user_id
-    ConnectionManager.active_users.append({"id": user_id, "name": "<script>alert(123)</script>", "group": "<img src=x onerror=alert(321)>"})
-
-@router.post("/remove")
-async def remove(
-    user_id: str
-):
-    ConnectionManager.active_connections.pop(user_id, None)
-    for user in ConnectionManager.active_users:
-                if user['id'] == user_id:
-                    ConnectionManager.active_users.remove(user)
