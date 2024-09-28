@@ -4,7 +4,6 @@ from core.log.logger import log_connection, log_authorization, log_disconnection
 
 from fastapi import APIRouter
 
-from core.websockets.connection_manager import ConnectionManager
 from core.websockets.config import (
     PREFIX,
     TAGS,
