@@ -33,6 +33,8 @@ def extract_values(s):
     if match:
         username = match.group(1)
         group = match.group(2)
+        if group == "None":
+            group = None
         return username, group
     return None, None
 
