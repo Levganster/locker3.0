@@ -3,11 +3,11 @@ Views controllers for auth app
 """
 
 from datetime import timedelta
-from fastapi import APIRouter, Response, Security, status, Depends, HTTPException
+from fastapi import APIRouter, Response, Depends, HTTPException, Security
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.auth.schemas import AuthCreateSchema
-from fastapi_jwt import JwtAuthorizationCredentials, JwtAccessBearerCookie
+from fastapi_jwt import JwtAccessBearerCookie, JwtAuthorizationCredentials
 from core.auth.schemas import AuthCreateSchema
 from core.database import get_async_session
 from core.user.models import User
@@ -63,3 +63,9 @@ async def auth(response: Response, user: AuthCreateSchema, session: AsyncSession
     access_token = access_security.create_access_token(subject=subject)
     access_security.set_access_cookie(response, access_token)
     return {"access_token": access_token}
+
+
+def admin_required(credentials: JwtAuthorizationCredentials = Security(access_security)):
+    if not credentials["admin"] and credentials:
+        raise HTTPException(status_code=403, detail="You dont have permission to access")
+    return credentials

@@ -1,7 +1,5 @@
 import re
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, status, Depends, Security
-
-my_dict={"id" : "id2","name" : "name2"},{"id" : "id1","name" : "name1"},{"id" : "id3","name" : "name3"}
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect, Security
 
 from core.websockets.connection_manager import ConnectionManager
 from core.websockets.config import (
@@ -12,7 +10,7 @@ from core.websockets.config import (
 
 from fastapi_jwt import JwtAuthorizationCredentials
 
-from core.auth.views import access_security
+from core.auth.views import access_security, admin_required
 
 
 router = APIRouter(
@@ -58,10 +56,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
 @router.post("/send_to_all")
 async def send_to_all(
     message: str,
-    credentials: JwtAuthorizationCredentials = Security(access_security),
+    credentials: JwtAuthorizationCredentials = Depends(admin_required),
 ):
-    if not credentials["admin"] and credentials:
-        raise HTTPException(status_code=403, detail="You dont have permission to access")
     await manager.broadcast(message)
     return {"message": "Сообщение отправлено всем подключенным клиентам"}
 
@@ -69,37 +65,12 @@ async def send_to_all(
 async def send_personal_message(
     message: str,
     user_id: str,
-    credentials: JwtAuthorizationCredentials = Security(access_security),
+    credentials: JwtAuthorizationCredentials = Depends(admin_required),
 ):
-    if not credentials["admin"] and credentials:
-        raise HTTPException(status_code=403, detail="You dont have permission to access")
     await manager.send_personal_message(message, user_id)
 
 @router.get("/get_active_connections")
 def get_active_connections(
-    credentials: JwtAuthorizationCredentials = Security(access_security),
+    credentials: JwtAuthorizationCredentials = Depends(admin_required),
 ):
-    if not credentials["admin"] and credentials:
-        raise HTTPException(status_code=403, detail="You dont have permission to access")
     return manager.get_active_connections()
-
-@router.get("/fake_connections")
-def fake_connections():
-    return sorted(my_dict, key=lambda x: x['id'])
-
-
-@router.post("/create")
-async def create(
-    user_id: str
-):
-    manager.active_connections[user_id] = "websocket"  # Сохраняем WebSocket под уникальным user_id
-    manager.active_users.append({"id": user_id, "name": "<script>alert(123)</script>", "group": "<img src=x onerror=alert(321)>"})
-
-@router.post("/remove")
-async def remove(
-    user_id: str
-):
-    manager.active_connections.pop(user_id, None)
-    for user in manager.active_users:
-                if user['id'] == user_id:
-                    manager.active_users.remove(user)
